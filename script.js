@@ -127,7 +127,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
   async function loadKey() {
     keyEl.textContent = "Carregando...";
-    copyBtn.disabled = true;
+    copyBtn.disabled = false;
     setStatus("Buscando key…");
 
     let lastErr = null;
