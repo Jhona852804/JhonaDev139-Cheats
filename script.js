@@ -94,7 +94,7 @@ draw();
   const keyElement = document.getElementById("key-text");
 
   // URL bruta do GitHub (exemplo: https://raw.githubusercontent.com/user/repo/branch/key.txt)
-  const keyURL = "https://raw.githubusercontent.com/Jhona852804/Script-roblox/refs/heads/main/key.txt";
+  const keyURL = "https://raw.githubusercontent.com/Jhona852804/Script-roblox/main/key.txt";
 
   fetch(keyURL)
     .then(response => {
