@@ -126,48 +126,49 @@ document.addEventListener("DOMContentLoaded", () => {
   }
 
   async function loadKey() {
-    keyEl.textContent = "Carregando...";
-    copyBtn.disabled = false;
-    setStatus("Buscando key…");
+  keyEl.textContent = "Carregando...";
+  copyBtn.disabled = true;
+  setStatus("Buscando key…");
 
-    let lastErr = null;
+  let lastErr = null;
 
-    for (const url of SOURCES) {
-      try {
-        const res = await fetchWithTimeout(url, 12000, {
-          headers: { "Accept": url.includes("/contents/") ? "application/vnd.github+json" : "text/plain" },
-          // Modo CORS padrão; se houver CSP restrita no seu host, ajuste os domínios permitidos.
-          mode: "cors",
-          cache: "no-store",
-          credentials: "omit"
-        });
+  for (const url of SOURCES) {
+    try {
+      const res = await fetchWithTimeout(url, 12000, {
+        headers: { "Accept": url.includes("/contents/") ? "application/vnd.github+json" : "text/plain" },
+        mode: "cors",
+        cache: "no-store",
+        credentials: "omit"
+      });
 
-        if (!res.ok) throw new Error(`HTTP ${res.status} em ${url}`);
+      if (!res.ok) throw new Error(`HTTP ${res.status} em ${url}`);
 
-        let text;
-        if (url.includes("/contents/")) {
-          text = await loadFromApiJson(res);
-        } else {
-          text = (await res.text()).trim();
-        }
-
-        if (!text) throw new Error("Arquivo vazio");
-        keyEl.textContent = text;
-        copyBtn.disabled = false;
-        setStatus(`Carregado de: ${new URL(url).hostname}`);
-        return;
-      } catch (err) {
-        lastErr = err;
-        // tenta próxima rota
+      let text;
+      if (url.includes("/contents/")) {
+        text = await loadFromApiJson(res);
+      } else {
+        text = await res.text();
       }
-    }
 
-    keyEl.textContent = "Erro ao carregar a key";
-    copyBtn.disabled = true;
-    setStatus(lastErr ? String(lastErr) : "Falha desconhecida");
-    console.error("Falha ao obter key:", lastErr);
+      // remove quebras extras mas mantém a key
+      text = text.replace(/\r?\n/g, "").trim();
+
+      if (!text) throw new Error("Arquivo vazio");
+
+      keyEl.textContent = text;
+      copyBtn.disabled = false;   // ✅ sempre habilita quando tem texto
+      setStatus(`Carregado de: ${new URL(url).hostname}`);
+      return;
+    } catch (err) {
+      lastErr = err;
+    }
   }
 
+  keyEl.textContent = "Erro ao carregar a key";
+  copyBtn.disabled = true;
+  setStatus(lastErr ? String(lastErr) : "Falha desconhecida");
+  console.error("Falha ao obter key:", lastErr);
+  }
   async function copyKey() {
     const text = keyEl.textContent.trim();
     if (!text || text === "Carregando..." || text.startsWith("Erro")) return;
