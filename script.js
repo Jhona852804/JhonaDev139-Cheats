@@ -89,3 +89,23 @@ window.addEventListener("resize", () => {
 resizeCanvas();
 initParticles();
 draw();
+
+                           document.addEventListener("DOMContentLoaded", () => {
+  const keyElement = document.getElementById("key-text");
+
+  // URL bruta do GitHub (exemplo: https://raw.githubusercontent.com/user/repo/branch/key.txt)
+  const keyURL = "https://raw.githubusercontent.com/usuario/repositorio/branch/key.txt";
+
+  fetch(keyURL)
+    .then(response => {
+      if (!response.ok) throw new Error("Erro ao carregar a key");
+      return response.text();
+    })
+    .then(data => {
+      keyElement.textContent = data.trim();
+    })
+    .catch(error => {
+      keyElement.textContent = "Erro ao carregar a key";
+      console.error(error);
+    });
+});
