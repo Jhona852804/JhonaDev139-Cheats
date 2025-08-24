@@ -90,22 +90,118 @@ resizeCanvas();
 initParticles();
 draw();
 
-                           document.addEventListener("DOMContentLoaded", () => {
-  const keyElement = document.getElementById("key-text");
 
-  // URL bruta do GitHub (exemplo: https://raw.githubusercontent.com/user/repo/branch/key.txt)
-  const keyURL = "https://raw.githubusercontent.com/Jhona852804/Script-roblox/main/key.txt";
 
-  fetch(keyURL)
-    .then(response => {
-      if (!response.ok) throw new Error("Erro ao carregar a key");
-      return response.text();
-    })
-    .then(data => {
-      keyElement.textContent = data.trim();
-    })
-    .catch(error => {
-      keyElement.textContent = "Erro ao carregar a key";
-      console.error(error);
-    });
+
+document.addEventListener("DOMContentLoaded", () => {
+  const keyEl = document.getElementById("key-text");
+  const copyBtn = document.getElementById("copy-btn");
+  const reloadBtn = document.getElementById("reload-btn");
+  const statusEl = document.getElementById("status");
+
+  // Rotas em cascata (maior chance de sucesso)
+  const SOURCES = [
+    "https://raw.githubusercontent.com/Jhona852804/Script-roblox/main/key.txt",
+    "https://cdn.jsdelivr.net/gh/Jhona852804/Script-roblox@main/key.txt",
+    // GitHub API (base64) — último fallback
+    "https://api.github.com/repos/Jhona852804/Script-roblox/contents/key.txt?ref=main"
+  ];
+
+  function setStatus(msg) {
+    statusEl.textContent = msg || "";
+  }
+
+  function fetchWithTimeout(url, ms = 10000, opts = {}) {
+    const controller = new AbortController();
+    const id = setTimeout(() => controller.abort(), ms);
+    return fetch(url, { ...opts, signal: controller.signal })
+      .finally(() => clearTimeout(id));
+  }
+
+  async function loadFromApiJson(response) {
+    const json = await response.json();
+    if (!json || !json.content) throw new Error("Resposta da API inválida");
+    const decoded = atob(json.content.replace(/\n/g, ""));
+    return decoded.trim();
+  }
+
+  async function loadKey() {
+    keyEl.textContent = "Carregando...";
+    copyBtn.disabled = true;
+    setStatus("Buscando key…");
+
+    let lastErr = null;
+
+    for (const url of SOURCES) {
+      try {
+        const res = await fetchWithTimeout(url, 12000, {
+          headers: { "Accept": url.includes("/contents/") ? "application/vnd.github+json" : "text/plain" },
+          // Modo CORS padrão; se houver CSP restrita no seu host, ajuste os domínios permitidos.
+          mode: "cors",
+          cache: "no-store",
+          credentials: "omit"
+        });
+
+        if (!res.ok) throw new Error(`HTTP ${res.status} em ${url}`);
+
+        let text;
+        if (url.includes("/contents/")) {
+          text = await loadFromApiJson(res);
+        } else {
+          text = (await res.text()).trim();
+        }
+
+        if (!text) throw new Error("Arquivo vazio");
+        keyEl.textContent = text;
+        copyBtn.disabled = false;
+        setStatus(`Carregado de: ${new URL(url).hostname}`);
+        return;
+      } catch (err) {
+        lastErr = err;
+        // tenta próxima rota
+      }
+    }
+
+    keyEl.textContent = "Erro ao carregar a key";
+    copyBtn.disabled = true;
+    setStatus(lastErr ? String(lastErr) : "Falha desconhecida");
+    console.error("Falha ao obter key:", lastErr);
+  }
+
+  async function copyKey() {
+    const text = keyEl.textContent.trim();
+    if (!text || text === "Carregando..." || text.startsWith("Erro")) return;
+
+    try {
+      if (navigator.clipboard && navigator.clipboard.writeText) {
+        await navigator.clipboard.writeText(text);
+      } else {
+        // Fallback legacy
+        const ta = document.createElement("textarea");
+        ta.value = text;
+        ta.style.position = "fixed";
+        ta.style.opacity = "0";
+        document.body.appendChild(ta);
+        ta.focus();
+        ta.select();
+        document.execCommand("copy");
+        document.body.removeChild(ta);
+      }
+      const original = copyBtn.textContent;
+      copyBtn.textContent = "Copiado ✓";
+      setStatus("Key copiada para a área de transferência.");
+      setTimeout(() => {
+        copyBtn.textContent = original;
+        setStatus("");
+      }, 1400);
+    } catch (e) {
+      setStatus("Não foi possível copiar automaticamente.");
+      console.error(e);
+    }
+  }
+
+  copyBtn.addEventListener("click", copyKey);
+  reloadBtn.addEventListener("click", loadKey);
+
+  loadKey();
 });
