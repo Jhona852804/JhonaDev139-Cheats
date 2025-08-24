@@ -65,6 +65,10 @@ body {
   }
 }
 
+
+
+
+/* ===== Base existente ===== */
 body {
   margin: 0;
   height: 100vh;
@@ -76,77 +80,139 @@ body {
   flex-direction: column;
 }
 
-/* barra do topo com título */
+/* barra do topo com título e menu */
 .top-bar {
   display: flex;
   justify-content: space-between;
   align-items: center;
   background-color: #0A0A12;
   color: #FFFFFF;
-  padding: 1.5vh 4vw;
+  padding: 1.5vh 4vw; /* espaçamento proporcional */
   font-family: sans-serif;
-  font-size: 3.5vw;
+  font-size: 3.5vw; /* RESPONSIVO */
   position: fixed;
-  top: 0;
-  left: 0;
-  right: 0;
+  top: 0; left: 0; right: 0;
   height: 9vh;
   z-index: 10;
 }
 
-/* centralização do conteúdo */
-.content {
-  flex: 1; /* ocupa o espaço disponível */
-  display: flex;
-  justify-content: center;
-  align-items: center;
+/* ícone do menu hambúrguer (reservado) */
+.top-bar .right {
+  font-size: 2.5vw;
+  cursor: pointer;
+  background-color: #1F1F6C;
+  color: #B2B2FF;
+  padding: 1vh 2vw;
+  border-radius: 0.8vw;
+  border: 2px solid #111;
+  transition: background-color 0.2s ease;
+}
+.top-bar .right:hover { background-color: #444; }
+
+@media (min-width: 768px) {
+  .top-bar { font-size: 28px; }
+  .top-bar .right { font-size: 20px; padding: 10px 14px; border-radius: 8px; }
+}
+@media (min-width: 1200px) {
+  .top-bar { font-size: 36px; }
+  .top-bar .right { font-size: 22px; padding: 12px 16px; }
 }
 
-/* caixa da key */
+/* ===== Ajustes novos ===== */
+:root {
+  --footer-h: 64px;            /* altura do rodapé fixo */
+  --bg-1: #0A0A12;
+  --bg-2: #1C1C3C;
+  --accent: #1F1F6C;
+  --accent-2: #B2B2FF;
+  --text: #FFFFFF;
+}
+
+body { padding-bottom: var(--footer-h); } /* evita que o rodapé cubra o conteúdo */
+
+/* Conteúdo central */
+.content {
+  flex: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 16px;
+}
+
+/* Caixa da Key */
 .key-box {
-  background: #1C1C3C;
-  padding: 25px 45px;
+  background: var(--bg-2);
+  padding: 24px 32px;
   border-radius: 14px;
   box-shadow: 0 0 15px rgba(0,0,0,0.7);
   text-align: center;
+  max-width: 92vw;
 }
 
 .key-box h2 {
   margin: 0 0 12px;
-  color: #B2B2FF;
+  color: var(--accent-2);
   font-family: sans-serif;
 }
 
-#key-text {
+.key-text {
   font-size: 22px;
-  font-weight: bold;
-  color: #FFF;
+  font-weight: 700;
+  color: var(--text);
   font-family: monospace;
+  word-break: break-all;
+  margin: 8px 0 16px;
 }
 
-/* rodapé fixo */
+/* Botões */
+.actions { display: flex; gap: 12px; justify-content: center; margin-top: 4px; }
+
+.btn {
+  background: var(--accent);
+  color: var(--accent-2);
+  border: 2px solid #111;
+  border-radius: 10px;
+  padding: 10px 14px;
+  font-size: 16px;
+  cursor: pointer;
+  transition: transform .06s ease, opacity .2s ease, background-color .2s ease;
+}
+.btn:hover { transform: translateY(-1px); }
+.btn:disabled { opacity: 0.6; cursor: not-allowed; }
+.btn.outline {
+  background: transparent;
+  color: var(--accent-2);
+  border-color: var(--accent);
+}
+
+.status {
+  display: block;
+  margin-top: 8px;
+  color: #bfc4ff;
+  font-family: monospace;
+  opacity: .9;
+}
+
+/* Rodapé fixo */
 .footer {
-  background-color: #0A0A12;
-  text-align: center;
-  padding: 15px;
-  border-top: 2px solid #1F1F6C;
-  color: #FFF;
-  font-family: sans-serif;
   position: fixed;
-  bottom: 0;
-  left: 0;
-  right: 0;
+  bottom: 0; left: 0; right: 0;
+  height: var(--footer-h);
+  background-color: var(--bg-1);
+  border-top: 2px solid var(--accent);
+  color: var(--text);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0 12px;
+  text-align: center;
+  font-family: sans-serif;
 }
 
-/* responsividade */
+/* Responsividade leve */
 @media (min-width: 768px) {
-  .top-bar { font-size: 28px; }
-  .top-bar .right { font-size: 20px; padding: 10px 14px; border-radius: 8px; }
-  #key-text { font-size: 24px; }
+  .key-text { font-size: 24px; }
 }
-
 @media (min-width: 1200px) {
-  .top-bar { font-size: 36px; }
-  .top-bar .right { font-size: 22px; padding: 12px 16px; }
-  #key-text { font-size: 26px; }
+  .key-text { font-size: 26px; }
   }
