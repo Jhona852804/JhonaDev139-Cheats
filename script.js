@@ -216,8 +216,9 @@ document.querySelector('.close-popup-btn').addEventListener('click', () => {
   document.getElementById('info-popup').classList.add('hidden');
 });
 
-// Mantendo compatibilidade do botão "Ver Key" com seu JS existente
+
 document.querySelector('.open-key-btn').addEventListener('click', () => {
-  // Aqui você pode disparar a mesma função que o seu JS atual da key
-  // Por exemplo, abrir a seção da key ou acionar o botão "copy-btn" etc.
+  const keyContainer = document.getElementById('key-container');
+  keyContainer.classList.remove('hidden'); // mostra o container
+  keyContainer.scrollIntoView({ behavior: "smooth" }); // rola a tela para ele
 });
