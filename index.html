@@ -13,17 +13,32 @@
     <div class="left">JhonaDev139 - Key</div>
   </header>
 
-  <main class="content">
-    <div class="key-box" role="region" aria-label="Área da Key">
-      <h2>Sua Key</h2>
-      <p id="key-text" class="key-text" aria-live="polite">Carregando...</p>
-      <div class="actions">
-        <button id="copy-btn" class="btn" disabled>Copiar Key</button>
-        <button id="reload-btn" class="btn outline">Recarregar</button>
-      </div>
-      <small id="status" class="status" aria-live="polite"></small>
+<main class="content">
+  <div class="main-card">
+    <h1 class="main-card-title">Escolha uma opção</h1>
+
+    <!-- Card da Key -->
+    <div class="inner-card">
+      <h2>KEY</h2>
+      <button class="btn open-key-btn">Ver Key</button>
     </div>
-  </main>
+
+    <!-- Card de Informações -->
+    <div class="inner-card">
+      <h2>Informações do Script</h2>
+      <button class="btn open-info-btn">Ver Informações</button>
+    </div>
+  </div>
+</main>
+
+<!-- Pop-up de informações do script -->
+<div id="info-popup" class="popup hidden">
+  <div class="popup-card">
+    <h2>Informações do Script</h2>
+    <p>Aqui você pode escrever detalhes sobre cada função do script, dicas, exemplos, etc.</p>
+    <button class="btn close-popup-btn">Fechar</button>
+  </div>
+</div>
 
   <footer class="footer">
     <p>© 2025 JhonaDev139 — Todos os direitos reservados</p>
