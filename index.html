@@ -18,10 +18,21 @@
     <h1 class="main-card-title">Escolha uma opção</h1>
 
     <!-- Card da Key -->
-    <div class="inner-card">
-      <h2>KEY</h2>
-      <button class="btn open-key-btn">Ver Key</button>
-    </div>
+<div class="inner-card">
+  <h2>KEY</h2>
+  <button class="btn open-key-btn">Ver Key</button>
+</div>
+
+<!-- Key box existente escondida inicialmente -->
+<div id="key-container" class="key-box hidden" role="region" aria-label="Área da Key">
+  <h2>Sua Key</h2>
+  <p id="key-text" class="key-text" aria-live="polite">Carregando...</p>
+  <div class="actions">
+    <button id="copy-btn" class="btn" disabled>Copiar Key</button>
+    <button id="reload-btn" class="btn outline">Recarregar</button>
+  </div>
+  <small id="status" class="status" aria-live="polite"></small>
+</div>
 
     <!-- Card de Informações -->
     <div class="inner-card">
