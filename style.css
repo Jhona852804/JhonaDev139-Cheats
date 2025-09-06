@@ -301,3 +301,11 @@ body { padding-bottom: var(--footer-h); } /* evita que o rodapé cubra o conteú
   line-height: 1.5;
   margin-bottom: 20px;
              }
+
+
+.hidden { display: none; }
+
+/* Para que o key-container fique centralizado */
+#key-container {
+  margin-top: 20px;
+  }
