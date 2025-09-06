@@ -206,3 +206,18 @@ document.addEventListener("DOMContentLoaded", () => {
 
   loadKey();
 });
+
+// JS para abrir/fechar pop-up
+document.querySelector('.open-info-btn').addEventListener('click', () => {
+  document.getElementById('info-popup').classList.remove('hidden');
+});
+
+document.querySelector('.close-popup-btn').addEventListener('click', () => {
+  document.getElementById('info-popup').classList.add('hidden');
+});
+
+// Mantendo compatibilidade do botão "Ver Key" com seu JS existente
+document.querySelector('.open-key-btn').addEventListener('click', () => {
+  // Aqui você pode disparar a mesma função que o seu JS atual da key
+  // Por exemplo, abrir a seção da key ou acionar o botão "copy-btn" etc.
+});
