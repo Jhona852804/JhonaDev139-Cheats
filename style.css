@@ -309,3 +309,7 @@ body { padding-bottom: var(--footer-h); } /* evita que o rodapé cubra o conteú
 #key-container {
   margin-top: 20px;
   }
+
+body {
+  font-family: 'Roboto', sans-serif;
+}
